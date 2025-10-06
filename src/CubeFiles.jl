@@ -2,7 +2,8 @@ module CubeFiles
 
 using AtomsBase
 using StaticArrays
-import Unitful: ustrip
+import Unitful: ustrip, @u_str
+import UnitfulAtomic
 
 export CubeSystem, readcube_system
 

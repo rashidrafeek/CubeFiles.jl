@@ -6,6 +6,8 @@
     value_at(cs::CubeSystem{3}, r::SVector{3,<:Real};
              mode::Symbol = :trilinear, outside::Symbol = :error)
 
+r is expected to be in Å units
+
 `mode`:
 - `:trilinear`  → trilinear interpolation (default)
 - `:voxel`      → return value at the lower-corner grid node of the voxel containing `r`
@@ -15,7 +17,8 @@ function value_at(cs::CubeSystem{3}, r::AbstractVector{<:Real};
                   mode::Symbol = :trilinear, outside::Symbol = :error)
 
     fld = cs.field
-    A = SMatrix{3,3,Float64}(hcat(fld.axes...))
+    cellmat = ustrip.(u"Å", hcat(fld.axes...)*u"bohr")
+    A = SMatrix{3,3,Float64}(cellmat)
     ξ = A \ (SVector{3,Float64}(r) .- fld.origin)  # fractional indices (i,j,k)
     i, j, k = ξ
     nx, ny, nz = size(fld.values)

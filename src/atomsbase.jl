@@ -44,9 +44,9 @@ function Base.keys(cs::CubeSystem)
     return Tuple(unique!(collect(Iterators.flatten((inner_keys, cube_keys)))))
 end
 
-Base.haskey(cs::CubeSystem, k) = (haskey(cs.system, k) || (k in keys(cs)))
+Base.haskey(cs::CubeSystem, k::Symbol) = (haskey(cs.system, k) || (k in keys(cs)))
 
-function Base.getindex(cs::CubeSystem, k)
+function Base.getindex(cs::CubeSystem, k::Symbol)
     if haskey(cs.system, k)
         return cs.system[k]
     end
@@ -58,6 +58,7 @@ function Base.getindex(cs::CubeSystem, k)
            (k in keys(cs.field.metadata)) ? cs.field.metadata[k] :
            throw(KeyError(k))
 end
+Base.getindex(cs::CubeSystem, i::Integer) = cs.system[i]
 
 # Particle properties
 AtomsBase.atomkeys(cs::CubeSystem)              = AtomsBase.atomkeys(cs.system)
